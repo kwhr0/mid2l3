@@ -4,14 +4,14 @@
 
 #ifndef XPRINTF_DEF
 #define XPRINTF_DEF
-#include <string.h>
+#include <cmoc.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #define XF_USE_OUTPUT	1	/* 1: Enable output functions */
-#define	XF_CRLF			0	/* 1: Convert \n ==> \r\n in the output char */
+#define	XF_CRLF			1	/* 1: Convert \n ==> \r\n in the output char */
 #define	XF_USE_DUMP		0	/* 1: Enable put_dump function */
 #define	XF_USE_LLI		0	/* 1: Enable long long integer in size prefix ll */
 #define	XF_USE_FP		0	/* 1: Enable support for floating point in type e and f */
@@ -24,6 +24,7 @@ extern "C" {
 #endif
 
 #if XF_USE_OUTPUT
+//#include <stdarg.h>
 #define xdev_out(func) xfunc_output = (void(*)(int))(func)
 extern void (*xfunc_output)(int);
 void xputc (int chr);
@@ -33,7 +34,9 @@ void xfputs (void (*func)(int), const char* str);
 void xprintf (const char* fmt, ...);
 void xsprintf (char* buff, const char* fmt, ...);
 void xfprintf (void (*func)(int), const char* fmt, ...);
+#if XF_USE_DUMP
 void put_dump (const void* buff, unsigned long addr, int len, size_t width);
+#endif
 #endif
 
 #if XF_USE_INPUT

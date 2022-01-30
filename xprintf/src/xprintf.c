@@ -24,7 +24,7 @@
 
 
 #if XF_USE_OUTPUT
-#include <stdarg.h>
+//#include <stdarg.h>
 void (*xfunc_output)(int);	/* Pointer to the default output device */
 static char *strptr;		/* Pointer to the output memory (used by xsprintf) */
 
@@ -248,6 +248,7 @@ static void xvfprintf (
 #endif
 
 	for (;;) {
+_continue:
 		c = *fmt++;					/* Get a format character */
 		if (!c) break;				/* End of format? */
 		if (c != '%') {				/* Pass it through if not a % sequense */
@@ -309,7 +310,7 @@ static void xvfprintf (
 		case 'X':					/* Hexdecimal (upper case) */
 			r = 16; break;
 		case 'c':					/* A character */
-			xfputc(func, (char)va_arg(arp, int)); continue;
+			xfputc(func, (char)va_arg(arp, int)); goto _continue;
 		case 's':					/* String */
 			p = va_arg(arp, char*);		/* Get a pointer argument */
 			if (!p) p = "";				/* Null ptr generates a null string */
@@ -318,7 +319,7 @@ static void xvfprintf (
 			for ( ; !(f & 2) && j < w; j++) xfputc(func, pad);	/* Left pads */
 			while (*p && prec--) xfputc(func, *p++);/* String body */
 			while (j++ < w) xfputc(func, ' ');		/* Right pads */
-			continue;
+			goto _continue;
 #if XF_USE_FP
 		case 'f':					/* Float (decimal) */
 		case 'e':					/* Float (e) */
@@ -327,10 +328,10 @@ static void xvfprintf (
 			for (j = strlen(p); !(f & 2) && j < w; j++) xfputc(func, pad);	/* Left pads */
 			while (*p) xfputc(func, *p++);		/* Value */
 			while (j++ < w) xfputc(func, ' ');	/* Right pads */
-			continue;
+			goto _continue;
 #endif
 		default:					/* Unknown type (passthrough) */
-			xfputc(func, c); continue;
+			xfputc(func, c); goto _continue;
 		}
 
 		/* Get an integer argument and put it in numeral */
