@@ -213,11 +213,11 @@ static u8 Process1(u8 data) {
 		sState = TEMPO2;
 		break;
 		case TEMPO2:
-v |= (u16)data << 8;
+		v |= (u16)data << 8;
 		sState = TEMPO3;
 		break;
 		case TEMPO3:
-v |= data;
+		v |= data;
 		v2 = (u32)(sTime << 8) / sDelta;
 		sDelta = sTimebase / v;
 		sTime = v2 * sDelta >> 8;
