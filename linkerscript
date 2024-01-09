@@ -14,4 +14,5 @@ section destructors_end
 section initgl_start
 section initgl
 section initgl_end
+section program_end
 entry __start
